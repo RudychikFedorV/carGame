@@ -20,7 +20,7 @@ body {
 .car {
   position: absolute;
   width: 80px;
-  bottom: 0;
+  transform: translateY(75vh);
 }
 .trees {
   position: absolute;

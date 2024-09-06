@@ -1,7 +1,7 @@
 (() => {
   let isRause = false;
   let animationId = null;
-  const speed = 10;
+  const speed = 3;
 
   const car = document.querySelector(".car");
   const trees = document.querySelectorAll(".trees");
@@ -41,6 +41,14 @@
     return { x: numericX, y: numericY };
   };
   const coordsTree1 = getCoords(tree1);
+  const carCoords = getCoords(car);
+  
+  const carMoveInfo = {
+    top: null,
+    bottom: null,
+    left: null,
+    right: null,
+  };
 
   const treesCoords = [];
   for (let i = 0; i < trees.length; i++) {
@@ -48,7 +56,66 @@
     const coordsTree = getCoords(tree);
     treesCoords.push(coordsTree);
   }
-  console.log(treesCoords);
+
+  document.addEventListener("keydown", (event) => {
+    const code = event.code;
+    if (code === "ArrowUp" && carMoveInfo.top === null) {
+      carMoveInfo.top = requestAnimationFrame(carMoveToTop);
+    } else if (code === "ArrowDown" && carMoveInfo.bottom === null) {
+      carMoveInfo.bottom = requestAnimationFrame(carMoveToBottom);
+    } else if (code === "ArrowLeft" && carMoveInfo.left === null) {
+      carMoveInfo.left = requestAnimationFrame(carMoveToLeft);
+    } else if (code === "ArrowRight" && carMoveInfo.right === null) {
+      carMoveInfo.right = requestAnimationFrame(carMoveToRight);
+    }
+  });
+  document.addEventListener("keyup", (event) => {
+    const code = event.code;
+    if (code === "ArrowUp") {
+      cancelAnimationFrame(carMoveInfo.top);
+      carMoveInfo.top = null;
+    } else if (code === "ArrowDown") {
+      cancelAnimationFrame(carMoveInfo.bottom);
+      carMoveInfo.bottom = null;
+    } else if (code === "ArrowLeft") {
+      cancelAnimationFrame(carMoveInfo.left);
+      carMoveInfo.left = null;
+    } else if (code === "ArrowRight") {
+      cancelAnimationFrame(carMoveInfo.right);
+      carMoveInfo.right = null;
+    }
+  });
+  const carMoveToTop = () => {
+    const newX = carCoords.x;
+    const newY = carCoords.y - 5;
+    carCoords.y = newY;
+    carMove(newX, newY);
+    carMoveInfo.top = requestAnimationFrame(carMoveToTop);
+  };
+  const carMoveToBottom = () => {
+    const newX = carCoords.x;
+    const newY = carCoords.y + 5;
+    carCoords.y = newY;
+    carMove(newX, newY);
+    carMoveInfo.bottom = requestAnimationFrame(carMoveToBottom);
+  };
+  const carMoveToLeft = () => {
+    const newX = carCoords.x - 5;
+    carCoords.x = newX;
+    const newY = carCoords.y;
+    carMove(newX, newY);
+    carMoveInfo.left = requestAnimationFrame(carMoveToLeft);
+  };
+  const carMoveToRight = () => {
+    const newX = carCoords.x + 5;
+    carCoords.x = newX;
+    const newY = carCoords.y;
+    carMove(newX, newY);
+    carMoveInfo.right = requestAnimationFrame(carMoveToRight);
+  };
+  const carMove = (x, y) => {
+    car.style.transform = `translate(${x}px, ${y}px)`;
+  };
   animationId = requestAnimationFrame(startGame);
 
   gameBtn.addEventListener("click", () => {
