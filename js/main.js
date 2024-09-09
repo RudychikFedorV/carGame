@@ -7,10 +7,18 @@
   const carWidth = car.clientWidth / 2;
   const carHeight = car.clientHeight;
 
+  const coin = document.querySelector(".coin");
+  const coinWidth = coin.clientWidth / 2;
+
+  const arrow = document.querySelector(".arrow");
+  const arrowWidth = arrow.clientWidth / 2;
+
+  const danger = document.querySelector(".danger");
+  const dangerWidth = danger.clientWidth / 2;
+
   const road = document.querySelector(".road");
   const roadHeight = road.clientHeight;
   const roadWidth = road.clientWidth / 2;
-  console.dir(roadHeight);
 
   const trees = document.querySelectorAll(".trees");
   const gameBtn = document.querySelector(".game-btn");
@@ -22,6 +30,9 @@
   const startGame = () => {
     animationId = requestAnimationFrame(startGame);
     treesAnimation();
+    elementAnimation(coin, coinCoord, coinWidth, -100);
+    elementAnimation(danger, dangerCoord, dangerWidth, -250);
+    elementAnimation(arrow, arrowCoord, arrowWidth, -600);
   };
 
   const treesAnimation = () => {
@@ -39,6 +50,80 @@
     }
   };
 
+  const elementAnimation = (
+    element,
+    elementCoord,
+    elementWidth,
+    elementInitialCoord
+  ) => {
+    let newYCoord = elementCoord.y + speed;
+    let newXCoord = elementCoord.x;
+    if (newYCoord > window.innerHeight) {
+      newYCoord = -100;
+
+      const direction = parseInt(Math.random() * 2);
+      const maxXCoord = roadWidth + 1 - elementWidth;
+      const randomXCoord = parseInt(Math.random() * maxXCoord);
+      if (direction === 0) {
+        newXCoord = -randomXCoord;
+      } else if (direction === 1) {
+        newXCoord = randomXCoord;
+      }
+    }
+    elementCoord.y = newYCoord;
+    elementCoord.x = newXCoord;
+    element.style.transform = `translate(${newXCoord}px, ${newYCoord}px)`;
+  };
+  // const coinAnimation = () => {
+  //   let newYCoord = coinCoord.y + speed;
+  //   let newXCoord = coinCoord.x;
+  //   if (newYCoord > window.innerHeight) {
+  //     newYCoord = -100;
+
+  //     const direction = parseInt(Math.random() * 2);
+  //     const maxXCoord = roadWidth + 1 - coinWidth;
+  //     const randomXCoord = parseInt(Math.random() * maxXCoord);
+  //     if (direction === 0) {
+  //       newXCoord = -randomXCoord;
+  //     } else if (direction === 1) {
+  //       newXCoord = randomXCoord;
+  //     }
+  //   }
+  //   coinCoord.y = newYCoord;
+  //   coinCoord.x = newXCoord;
+  //   coin.style.transform = `translate(${newXCoord}px, ${newYCoord}px)`;
+  // };
+  // const arrowAnimation = () => {
+  //   let newYCoord = arrowCoord.y + speed;
+  //   let newXCoord = arrowCoord.x;
+  //   if (newYCoord > window.innerHeight) {
+  //     newYCoord = -600;
+
+  //     const direction = parseInt(Math.random() * 2);
+  //     const maxXCoord = roadWidth + 1 - arrowWidth;
+  //     const randomXCoord = parseInt(Math.random() * maxXCoord);
+  //     newXCoord = direction === 0 ? -randomXCoord : randomXCoord;
+  //   }
+  //   arrowCoord.y = newYCoord;
+  //   arrowCoord.x = newXCoord;
+  //   arrow.style.transform = `translate(${newXCoord}px, ${newYCoord}px)`;
+  // };
+  // const dangerAnimation = () => {
+  //   let newYCoord = dangerCoord.y + speed;
+  //   let newXCoord = dangerCoord.x;
+  //   if (newYCoord > window.innerHeight) {
+  //     newYCoord = -250;
+
+  //     const direction = parseInt(Math.random() * 2);
+  //     const maxXCoord = roadWidth + 1 - dangerWidth;
+  //     const randomXCoord = parseInt(Math.random() * maxXCoord);
+  //     newXCoord = direction === 0 ? -randomXCoord : randomXCoord;
+  //   }
+  //   dangerCoord.y = newYCoord;
+  //   dangerCoord.x = newXCoord;
+  //   danger.style.transform = `translate(${newXCoord}px, ${newYCoord}px)`;
+  // };
+
   const getCoords = (element) => {
     const matrix = window.getComputedStyle(element).transform;
     const array = matrix.split(",");
@@ -50,6 +135,9 @@
   };
   const coordsTree1 = getCoords(tree1);
   const carCoords = getCoords(car);
+  const coinCoord = getCoords(coin);
+  const arrowCoord = getCoords(arrow);
+  const dangerCoord = getCoords(danger);
 
   const carMoveInfo = {
     top: null,
@@ -132,7 +220,6 @@
   };
   const carMoveToLeft = () => {
     const newX = carCoords.x - 5;
-    console.log(newX);
     if (newX < -roadWidth + carWidth) {
       return;
     }
@@ -143,7 +230,6 @@
   };
   const carMoveToRight = () => {
     const newX = carCoords.x + 5;
-    console.log(newX);
     if (newX > roadWidth - carWidth) {
       return;
     }

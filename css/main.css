@@ -24,6 +24,7 @@ body {
 }
 .trees {
   position: absolute;
+  z-index: 10;
 }
 .tree-1 {
   transform: translate(-220px, -15vh);
@@ -58,6 +59,7 @@ body {
   padding: 0;
   cursor: pointer;
   transition: transform 0.4s ease;
+  z-index: 11;
 }
 .game-btn:hover {
   transform: scale(1.1);
@@ -70,16 +72,19 @@ body {
   display: none;
 }
 .danger {
-    position: absolute;
-    width: 80px;
+  position: absolute;
+  width: 80px;
+  transform: translate(100px, -250px);
 }
 
 .coin {
-    position: absolute;
-    width: 50px;
+  position: absolute;
+  width: 50px;
+  transform: translate(50px, -100px);
 }
 
 .arrow {
-    position: absolute;
-    width: 50px;
+  position: absolute;
+  width: 50px;
+  transform: translate(10px, -600px);
 }
